@@ -9,10 +9,21 @@ on:
 
 jobs:
   test:
-    name: Test TypeScript code
-    runs-on: "macos-latest"
+    name: Test TypeScript code for event ${{ github.event_name }} on ${{ github.ref }}
+    strategy:
+      matrix:
+        nodeversion: [">=18.x", latest]
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm i
-      - run: npm run test
+      - name: Checking out
+        uses: actions/checkout@v3
+      - name: Setup Node.js ${{ matrix.nodeversion }} on ${{ matrix.os }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.nodeversion }}
+      - name: Installing dependencies with `npm install`
+        run: npm i
+      - name: Running tests with Node.js ${{ matrix.nodeversion }} on ${{ matrix.os }}
+        run: npm run test

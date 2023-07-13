@@ -8,7 +8,9 @@ dotenv.config();
 
 async function main() {
   const port = process.env.PORT || 8000;
+
   const app = express();
+  app.use(express.json());
 
   app.get("/max", newCalcHandler(max));
   app.get("/min", newCalcHandler(min));

@@ -23,11 +23,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.nodeversion }}
-      - name: Setup pnpm with Node.js ${{ matrix.nodeversion }} on ${{ matrix.os }}
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
-      - name: Installing dependencies with `pnpm ci`
-        run: pnpm ci
-      - name: Running Jest tests with Node.js ${{ matrix.nodeversion }} on ${{ matrix.os }}
-        run: pnpm test
+      - name: Installing dependencies with `npm install`
+        run: npm i
+      - name: Running tests with Node.js ${{ matrix.nodeversion }} on ${{ matrix.os }}
+        run: npm run test

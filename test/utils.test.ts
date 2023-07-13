@@ -1,5 +1,5 @@
 import { describe } from "node:test";
-import { max, min, avg } from "../src/index";
+import { max, min, avg } from "../src/utils";
 
 describe("test max", () => {
   test("empty array should throw error", () => {

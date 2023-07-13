@@ -1,4 +1,4 @@
-import { MongoDBConnection, mongoUrl } from "../src/mongodb";
+import { MongoDBConnection, mongoDbUrl } from "../src/mongodb";
 
 describe("Test MongoDB URL", () => {
   test("Format conn string", () => {
@@ -13,7 +13,7 @@ describe("Test MongoDB URL", () => {
 
     tests.forEach((test) => {
       const [conn, expected] = test;
-      expect(mongoUrl(conn)).toEqual(expected);
+      expect(mongoDbUrl(conn)).toEqual(expected);
     });
   });
 });

@@ -21,7 +21,7 @@ export function defaultValues(conn: MongoDBConnection): MongoDBConnection {
   };
 }
 
-export function mongoUrl(conn: MongoDBConnection) {
+export function mongoDbUrl(conn: MongoDBConnection) {
   // Substitute default values
   conn = defaultValues(conn);
 

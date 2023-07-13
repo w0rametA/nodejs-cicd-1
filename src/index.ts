@@ -1,36 +1,42 @@
-// max(number[]): number
-// min(number[]): number
-// avg(number[]): number
+import express, { Request, Response } from "express";
+import dotenv from "dotenv";
+import { max, min, avg } from "./utils";
 
-export function max(numbers: number[]): number {
-  if (!numbers.length) throw Error("numbers was empty");
-  let currMax = numbers[0];
-  numbers.forEach((n) => {
-    if (n > currMax) {
-      currMax = n;
+type HandlerFunc = (req: Request, res: Response) => Promise<Response>;
+
+dotenv.config();
+
+async function main() {
+  const port = process.env.PORT || 8000;
+  const app = express();
+
+  app.get("/max", newCalcHandler(max));
+  app.get("/min", newCalcHandler(min));
+  app.get("/avg", newCalcHandler(avg));
+
+  app.listen(port, () => {
+    console.log(`server is listening on port ${port}`);
+  });
+}
+
+function newCalcHandler(calcFunc: (numbers: number[]) => number): HandlerFunc {
+  return (req: Request, res: Response): Promise<Response> => {
+    const { numbers } = req.body;
+    if (!numbers) {
+      return Promise.resolve(
+        res.status(400).json({ error: "missing `numbers` in body" }).end(),
+      );
     }
-  });
 
-  return currMax;
-}
-
-export function min(numbers: number[]): number {
-  if (!numbers.length) throw Error("numbers was empty");
-  let currMin = numbers[0];
-  numbers.forEach((n) => {
-    if (n < currMin) {
-      currMin = n;
+    try {
+      const m = calcFunc(numbers);
+      return Promise.resolve(
+        res.status(200).json({ numbers, ops: "max", result: m }).end(),
+      );
+    } catch (err) {
+      return Promise.resolve(res.status(400).json({ error: err }).end());
     }
-  });
-
-  return currMin;
+  };
 }
 
-export function avg(numbers: number[]): number {
-  if (!numbers.length) throw Error("numbers was empty");
-  const sum = numbers.reduce((r, n) => {
-    return r + n;
-  });
-
-  return sum / numbers.length;
-}
+main();

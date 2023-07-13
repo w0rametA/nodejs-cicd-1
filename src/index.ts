@@ -33,7 +33,7 @@ async function main(): Promise<void> {
   try {
     await mongo.connect();
   } catch (err) {
-    console.error(`error connecting to MongoDB at ${mongoDbUrl}: ${err}`);
+    console.error(`error connecting to MongoDB at ${mongoUrl}: ${err}`);
     return;
   }
 

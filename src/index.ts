@@ -40,9 +40,9 @@ async function main(): Promise<void> {
   const app = express();
   app.use(express.json());
 
-  app.get("/max", newCalcHandler(max));
-  app.get("/min", newCalcHandler(min));
-  app.get("/avg", newCalcHandler(avg));
+  app.get("/max", newCalcHandler("max", max));
+  app.get("/min", newCalcHandler("min", min));
+  app.get("/avg", newCalcHandler("avg", avg));
 
   // Get MongoDB collection "coll" from db "demo"
   const coll = await mongo.db("demo").collection("coll");
@@ -100,7 +100,10 @@ async function main(): Promise<void> {
   });
 }
 
-function newCalcHandler(calcFunc: (numbers: number[]) => number): HandlerFunc {
+function newCalcHandler(
+  name: string,
+  calcFunc: (numbers: number[]) => number,
+): HandlerFunc {
   return async (req: Request, res: Response): Promise<Response> => {
     const { numbers } = req.body;
     if (!numbers) {
@@ -112,7 +115,7 @@ function newCalcHandler(calcFunc: (numbers: number[]) => number): HandlerFunc {
     try {
       const m = calcFunc(numbers);
       return Promise.resolve(
-        res.status(200).json({ numbers, ops: "max", result: m }).end(),
+        res.status(200).json({ numbers, ops: name, result: m }).end(),
       );
     } catch (err) {
       return Promise.resolve(res.status(400).json({ error: err }).end());

@@ -1,5 +1,5 @@
 name: Test workflows
-run-name: Triggering test by ${{ github.actor }}
+run-name: "[${{ github.sha }}] Triggering test by ${{ github.actor }}"
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checking out
+      - name: Checking out ${{ github.ref }} ${{ github.sha }}
         uses: actions/checkout@v3
       - name: Setup Node.js ${{ matrix.nodeversion }} on ${{ matrix.os }}
         uses: actions/setup-node@v3
